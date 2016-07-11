@@ -1,0 +1,26 @@
+{
+  "name": "t2-sumobot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dtex/t2-sumobot.git"
+  },
+  "keywords": [],
+  "author": "Donovan Buck <donovan@donovan.bz>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dtex/t2-sumobot/issues"
+  },
+  "homepage": "https://github.com/dtex/t2-sumobot#readme",
+  "dependencies": {
+    "johnny-five": "^0.9.59",
+    "routes": "^2.1.0",
+    "socket.io": "^1.4.8",
+    "tessel-io": "^0.6.4"
+  }
+}

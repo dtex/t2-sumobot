@@ -1,0 +1,53 @@
+body {
+  background-color: #000;
+  -webkit-user-select: none;
+  margin: 0;
+}
+
+button {
+	background-color: yellow;
+	border-radius: 12px;
+	border: none;
+	display: inline-block;
+	cursor: pointer;
+	color: #000;
+	font-size: 12px;
+	padding: 12px 12px;
+	text-decoration: none;
+  margin: 10px;
+  min-width: 10vw;
+  outline: 0;
+  text-transform: uppercase;
+  -webkit-user-select: none;
+}
+
+button:active {
+	background-color: lightBlue;
+  position:relative;
+	top:4px;
+}
+
+#result {
+  color: #fff;
+}
+
+.row {
+  text-align: center;
+}
+
+#controls {
+  width: 100vw;
+  height: 50vh;
+}
+
+#stickContainer {
+  width: 100vw;
+  height: 50vh;
+  border: solid 0px yellow;
+  border-bottom-width: 1px;
+  margin-bottom: 50px;
+}
+
+#drive {
+  display: none;
+}
