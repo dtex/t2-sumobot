@@ -1,6 +1,5 @@
 // Configurable options --------------------
 var pathToStaticFiles = "/app/remote-script/public/";
-var heartbeatFrequency = 2000;
 // -----------------------------------------
 
 var http = require('http');
@@ -24,8 +23,6 @@ var server = http.createServer(function (req, res) {
 var io = Io(server);
 
 io.on('connection', function (socket) {
-  var heartbeatTimer;
-
   // Generate handlers on the user's connection for each method on bot
   bot.commands.forEach(function(command){
     socket.on(command, function(opts) {
@@ -33,7 +30,6 @@ io.on('connection', function (socket) {
       bot[command](opts);
     });
   });
-
 });
 
 function user(req, res, match) {
@@ -51,7 +47,5 @@ function staticFile(req, res, match) {
     } else {
       res.statusCode = 404;
     }
-
   });
-
 }
