@@ -1,6 +1,6 @@
 var stick = new VirtualJoystick({
   container: document.getElementById("stickContainer"),
-  strokeStyle: 'blue',
+  strokeStyle: 'yellow',
   limitStickTravel: true
 });
 
