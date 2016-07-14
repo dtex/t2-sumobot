@@ -19,34 +19,8 @@ stick.addEventListener('touchStartValidation', function(event) {
   return true;
 });
 
-var ease = function(n) {
-  return n * (2 - n);
-};
-
-var greater = function(a, b) {
-  return a > b ? a : b;
-};
-
-var lesser = function(a, b) {
-  return a > b ? b : a;
-};
-
-var listener = new window.keypress.Listener();
-
-var socket = io();
-socket.emit('newUser');
-
-var commands = [
-  {"com": "forward", "key": "up" },
-  {"com": "left", "key": "left" },
-  {"com": "right", "key": "right" },
-  {"com": "reverse", "key": "down" },
-  {"com": "stop", "key": "space" },
-  {"com": "drive", "key": "d" },
-];
-
-var lastLeft, lastRight;
 // Store the last sent drive values
+var lastForward, lastAz;
 
 // Check the position of the joystick every 100ms
 setInterval( function() {
@@ -56,26 +30,27 @@ setInterval( function() {
   var rawForward = Number(stick.deltaY() / 100);
   var rawAz = Number(stick.deltaX() / 100);
 
-  var easedAz = ease(Math.abs(rawAz));
   // If the position has changed
+  if (rawForward !== lastForward || rawAz !== lastAz) {
 
-  if (rawAz < 0) easedAz *= -1;
+    var easedAz = ease(Math.abs(rawAz));
 
-  var maxDiff = rawForward < 0 ? (-1 - rawForward) : (1 - rawForward);
+    if (rawAz < 0) easedAz *= -1;
 
-  var diff = easedAz >= 0 ? lesser(maxDiff, easedAz): greater(maxDiff, easedAz);
     // The maxDiff is the difference between 1 and our forward speed
+    var maxDiff = rawForward < 0 ? (-1 - rawForward) : (1 - rawForward);
 
-  if ((rawForward < 0 && easedAz > 0) || (rawForward > 0 && easedAz < 0)) {
-    left = rawForward + diff;
-    right = rawForward - diff;
-  }
-  if ((rawForward < 0 && easedAz < 0) || (rawForward > 0 && easedAz > 0)) {
-    left = rawForward - diff;
-    right = rawForward + diff;
-  }
+    var diff = easedAz >= 0 ? lesser(maxDiff, easedAz): greater(maxDiff, easedAz);
 
-  if (left !== lastLeft || right !== lastRight) {
+    if ((rawForward < 0 && easedAz > 0) || (rawForward > 0 && easedAz < 0)) {
+      left = rawForward + diff;
+      right = rawForward - diff;
+    }
+    if ((rawForward < 0 && easedAz < 0) || (rawForward > 0 && easedAz > 0)) {
+      left = rawForward - diff;
+      right = rawForward + diff;
+    }
+
     // If the user has released the joystick
     if (rawForward === 0 && easedAz === 0) {
       socket.emit("stop");
@@ -83,19 +58,27 @@ setInterval( function() {
       socket.emit("drive", {left: left, right: right});
     }
 
-    lastLeft = left;
-    lastRight = right;
+    lastForward = rawForward;
+    lastAz = rawAz;
   }
 
 }, 1/10 * 1000);
 
 // These are the commands that are bound to
 // buttons and keypresses
+var commands = [
+  {"com": "forward", "key": "up" },
+  {"com": "left", "key": "left" },
+  {"com": "right", "key": "right" },
+  {"com": "reverse", "key": "down" },
+  {"com": "stop", "key": "space" }
+];
+
 // Loop through each of our commands
 commands.forEach( function(command) {
-  command.el = document.getElementById(command.com);
 
   // Add listeners on the buttons
+  command.el = document.getElementById(command.com);
   command.el.addEventListener("touchstart", function() {
     socket.emit(command.com);
     return false;
@@ -120,7 +103,16 @@ document.addEventListener("mouseup", function() {
     socket.emit("stop");
 });
 
-setInterval(function() {
-  socket.emit("heartbeat");
-}, 1000);
 // Helper functions
+function ease(n) {
+  return n;
+  //return n * (2 - n);
+}
+
+function greater(a, b) {
+  return a > b ? a : b;
+}
+
+function lesser(a, b) {
+  return a > b ? b : a;
+}
