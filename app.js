@@ -9,25 +9,29 @@ var fs = require('fs');
 var bot = require('./lib/bot.js');
 var Io = require('socket.io');
 
+// For routing we use a minimalist option
+// https://github.com/aaronblohowiak/routes.js
 router.addRoute("/", user);
 router.addRoute("/*", staticFile);
 
+// A web server that listens on port 80
 var server = http.createServer(function (req, res) {
   var path = url.parse(req.url).pathname;
   var match = router.match(path);
-
   match.fn(req, res, match);
-
 }).listen(80);
 
+// Realtime communication between the client and server
+// http://socket.io/
 var io = Io(server);
 
 io.on('connection', function (socket) {
-  // Generate handlers on the user's connection for each method on bot
+
+  // Loop through the available commands on the robot and
+  // generate listeners on the user's connection
   bot.commands.forEach(function(command){
     socket.on(command, function(opts) {
-      console.log(command);
-      bot[command](opts);
+      bot[command](opts); // Run the command in lib/bot.js
     });
   });
 });
