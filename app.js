@@ -37,19 +37,22 @@ io.on('connection', function (socket) {
 });
 
 function user(req, res, match) {
-  res.statusCode = 200;
-  var rstream = fs.createReadStream(pathToStaticFiles + 'index.html');
-  rstream.pipe(res);
+  sendFile(res, pathToStaticFiles + 'index.html');
 }
 
 function staticFile(req, res, match) {
-  fs.stat(pathToStaticFiles + match.splats[0], function(err, stats) {
+  sendFile(res, pathToStaticFiles + match.splats[0]);
+}
+
+function sendFile(res, path) {
+  fs.stat(path, function(err, stats) {
     if (stats && stats.isFile()) {
       res.statusCode = 200;
-      var rstream = fs.createReadStream(pathToStaticFiles + match.splats[0]);
+      var rstream = fs.createReadStream(path);
       rstream.pipe(res);
     } else {
       res.statusCode = 404;
+      res.end();
     }
   });
 }
