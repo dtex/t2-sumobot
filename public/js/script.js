@@ -43,12 +43,12 @@ setInterval( function() {
     var diff = easedAz >= 0 ? lesser(maxDiff, easedAz): greater(maxDiff, easedAz);
 
     if ((rawForward < 0 && easedAz > 0) || (rawForward > 0 && easedAz < 0)) {
-      left = rawForward + diff;
-      right = rawForward - diff;
+      right = rawForward + diff;
+      left = rawForward - diff;
     }
     if ((rawForward < 0 && easedAz < 0) || (rawForward > 0 && easedAz > 0)) {
-      left = rawForward - diff;
-      right = rawForward + diff;
+      right = rawForward - diff;
+      left = rawForward + diff;
     }
 
     // If the user has released the joystick
